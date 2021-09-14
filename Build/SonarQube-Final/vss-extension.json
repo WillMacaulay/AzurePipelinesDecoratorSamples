@@ -1,15 +1,15 @@
 {
     "manifestVersion": 1,
-    "id": "pipelinedecoratorpre",
-    "name": "Example Pipeline Decorator PRE",
+    "id": "sonarqubedecoratorpost",
+    "name": "SonarQube Decorator POST",
     "version": "1.0.0",
-    "publisher": "WillMacaulay",
+    "publisher": "Will Macaulay",
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
         }
     ],    
-    "description": "This is the example of a Decorator which works with Build and YAML pipelines, and execute BEFORE any other task",
+    "description": "Add final tasks for SonarQube - Executes AFTER any other task",
     "categories": [
         "Azure Pipelines"
     ],
@@ -18,16 +18,16 @@
             "id": "my-required-task",
             "type": "ms.azure-pipelines.pipeline-decorator",
             "targets": [
-                "ms.azure-pipelines-agent-job.pre-job-tasks"
+                "ms.azure-pipelines-agent-job.post-job-tasks"
             ],
             "properties": {
-                "template": "custom-prejob-decorator.yml"
+                "template": "postjob-sonarqube-decorator.yml"
             }
         }
     ],
     "files": [
         {
-            "path": "custom-prejob-decorator.yml",
+            "path": "postjob-sonarqube-decorator.yml",
             "addressable": true,
             "contentType": "text/plain"
         }

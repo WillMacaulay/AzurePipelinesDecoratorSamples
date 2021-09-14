@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
-    "id": "pipelinedecoratorpre",
-    "name": "Example Pipeline Decorator PRE",
+    "id": "sonarqubedecoratorpre",
+    "name": "SonarQube Decorator PRE",
     "version": "1.0.0",
     "publisher": "WillMacaulay",
     "targets": [
@@ -9,7 +9,7 @@
             "id": "Microsoft.VisualStudio.Services"
         }
     ],    
-    "description": "This is the example of a Decorator which works with Build and YAML pipelines, and execute BEFORE any other task",
+    "description": "Add initialization tasks for SonarQube - Executes BEFORE any other tasks",
     "categories": [
         "Azure Pipelines"
     ],
@@ -21,13 +21,13 @@
                 "ms.azure-pipelines-agent-job.pre-job-tasks"
             ],
             "properties": {
-                "template": "custom-prejob-decorator.yml"
+                "template": "prejob-sonarqube-decorator.yml"
             }
         }
     ],
     "files": [
         {
-            "path": "custom-prejob-decorator.yml",
+            "path": "prejob-sonarqube-decorator.yml",
             "addressable": true,
             "contentType": "text/plain"
         }

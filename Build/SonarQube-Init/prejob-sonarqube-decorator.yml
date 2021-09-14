@@ -1,0 +1,8 @@
+steps:
+- task: SonarCloudPrepare@1
+  displayName: 'SonarQube -Init'
+  inputs:
+    SonarCloud: 'SonarQube'
+    organization: 'willmacaulay'
+    projectKey: 'WillMacaulay_myApp1'
+    projectName: 'WillMacaulay_myApp1'
