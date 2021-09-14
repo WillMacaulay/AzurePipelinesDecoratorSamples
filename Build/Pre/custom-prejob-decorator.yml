@@ -1,5 +1,27 @@
 steps:
 - task: CmdLine@2
-  displayName: 'Decorator-injected Task'
+  displayName: '1'
   inputs:
-    script: echo This is from the Decorator for Build
+    script: |
+      echo '##vso[task.setvariable variable=one]$(Build.Repository.Name)'
+
+- task: PowerShell@2
+  displayName: '2'
+  inputs:
+    targetType: 'inline'
+    script: |
+      $appName = "$(Build.Repository.Name)" -replace "/", "_" 
+      echo "Appname is now $appName"
+      echo '##vso[task.setvariable variable=appName2]$appName'
+           
+- task: CmdLine@2
+  displayName: '3'
+  inputs:
+    script: |
+      echo $(one)
+
+- task: CmdLine@2
+  displayName: '4'
+  inputs:
+    script: |
+      echo $(appName2)

@@ -3,7 +3,7 @@
     "id": "sonarqubedecoratorpost",
     "name": "SonarQube Decorator POST",
     "version": "1.0.0",
-    "publisher": "Will Macaulay",
+    "publisher": "WillMacaulay",
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"
