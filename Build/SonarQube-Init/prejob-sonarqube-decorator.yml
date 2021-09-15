@@ -1,17 +1,42 @@
 steps:
-
-
-- task: CmdLine@2
-  displayName: '1'
-  inputs:
-    script: |
-      echo 'In task 1'
-      echo '##vso[task.setvariable variable=sonarProjectKey]MyOwnValueSetHere
-
+  
 - task: PowerShell@2
-  displayName: '2'
+  displayName: 'Set SonarQube values from repository file'
+  inputs:
+    targetType: 'inline'
+    script: |
+      Import-Csv .\sonarQube.csv | ForEach-Object {
+        
+        $sqConn = $_.connection
+        $sqOrg  = $_.organization
+        $sqPK   = $_.projectKey
+        $sqPN   = $_.projectName
+        echo $sqConn, $sqOrg, $sqPK, $sqPN  
+        
+        # Set environment variables for use in task to initialize SonarQube
+        Write-Host "##vso[task.setvariable variable=sonarConnection]$sqConn"
+        Write-Host "##vso[task.setvariable variable=sonarOrganization]$sqOrg" 
+        Write-Host "##vso[task.setvariable variable=sonarProjectKey]$sqPK" 
+        Write-Host "##vso[task.setvariable variable=sonarProjectName]$sqPN"
+      }
+
+      
+- task: PowerShell@2
+  displayName: 'Display sonar csv values'
   inputs:
     targetType: 'inline'
     script: |
       echo 'In task 2'
+      Write-Host "Using connection: $env:sonarConnection"
+      Write-Host "Using organization: $env:sonarOrganization"
       Write-Host "Using key: $env:sonarProjectKey"
+      Write-Host "Using name: $env:sonarProjectName"
+
+
+- task: SonarCloudPrepare@1
+  displayName: 'SonarQube - Initialize'
+  inputs:
+    SonarCloud:   SonarQube
+    organization: willmacaulay
+    projectKey:   WillMacaulay_myApp1
+    projectName:  WillMacaulay_myApp1
