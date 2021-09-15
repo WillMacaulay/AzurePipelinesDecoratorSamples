@@ -40,3 +40,8 @@ steps:
     organization: willmacaulay
     projectKey:   WillMacaulay_myApp1
     projectName:  WillMacaulay_myApp1
+    extraProperties:
+      sonar.SonarCloud = $env:sonarConnection
+      sonar.organization = $env:sonarOrganization
+      sonar.projectKey = $env:sonarProjectKey
+      sonar.projectName = $env:sonarProjectName
