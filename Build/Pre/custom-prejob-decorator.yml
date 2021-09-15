@@ -3,25 +3,42 @@ steps:
   displayName: '1'
   inputs:
     script: |
+      echo 'In task 1'
       echo '##vso[task.setvariable variable=one]$(Build.Repository.Name)'
 
-- task: PowerShell@2
+- task: CmdLine@2
   displayName: '2'
+  inputs:
+    script: |
+      echo 'In task 2'
+      echo '##vso[task.setvariable variable=sonarProjectKey]MyOwnValueSetHere
+
+- task: PowerShell@2
+  displayName: '3'
   inputs:
     targetType: 'inline'
     script: |
-      $appName = "$(Build.Repository.Name)" -replace "/", "_" 
-      echo "Appname is now $appName"
-      echo '##vso[task.setvariable variable=appName2]$appName'
-           
-- task: CmdLine@2
-  displayName: '3'
-  inputs:
-    script: |
-      echo $(one)
+      echo 'In task 3'
+        Write-Host "Using key: $env:sonarProjectKey"
 
-- task: CmdLine@2
+- task: PowerShell@2
   displayName: '4'
   inputs:
+    targetType: 'inline'
     script: |
-      echo $(appName2)
+      echo 'In task 4'
+      Import-Csv .\sonarQube.csv | ForEach-Object {
+        $pk = $_.projectKey
+        echo $pk
+        #echo '##vso[task.setvariable variable=sonarProjectKey]$pk'
+        #echo '##vso[task.setvariable variable=sonarProjectKey]$(pk)'
+        Write-Host "##vso[task.setvariable variable=sonarProjectKey]$pk"
+      }
+
+- task: PowerShell@2
+  displayName: '5'
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo 'In task 5'
+        Write-Host "Using key: $env:sonarProjectKey"
