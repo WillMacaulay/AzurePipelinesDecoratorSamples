@@ -37,6 +37,7 @@ steps:
   inputs:
     # Cannot set the SonarCloud value using a variable for some reason!!!
     SonarCloud:   SonarQube
+    # SonarCloud:   $(SONARCONNECTION)  ... Cant use !!! ???
     # Others can be set by variable
     organization: $(SONARORGANIZATION)
     projectKey:   $(SONARPROJECTKEY)
