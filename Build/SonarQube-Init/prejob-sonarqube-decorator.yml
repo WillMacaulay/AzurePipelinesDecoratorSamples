@@ -26,16 +26,15 @@ steps:
     targetType: 'inline'
     script: |
       echo 'In task: Display sonar csv values'
-      Write-Host "Using connection:   $(SONARCONNECTION)"
-      Write-Host "Using organization: $(SONARORGANIZATION)"
-      Write-Host "Using key:          $(SONARPROJECTKEY)"
-      Write-Host "Using name:         $(SONARPROJECTNAME)"
+      Write-Host "Using connection:   $SONARCONNECTION"
+      Write-Host "Using organization: $SONARORGANIZATION"
+      Write-Host "Using key:          $SONARPROJECTKEY"
+      Write-Host "Using name:         $SONARPROJECTNAME"
 
 - task: SonarCloudPrepare@1
   displayName: 'SonarQube - Initialize'
   inputs:
-    SonarCloud:   $(SONARCONNECTION)
-    organization: $(SONARORGANIZATION)
-    projectKey:   $(SONARPROJECTKEY)
+    SonarCloud:   SonarQube
+    organization: willmacaulay
+    projectKey:   $(SONARPROJECTNAME)
     projectName:  $(SONARPROJECTNAME)    
-
