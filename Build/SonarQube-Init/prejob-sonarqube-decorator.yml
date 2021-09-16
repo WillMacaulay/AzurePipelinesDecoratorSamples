@@ -37,7 +37,7 @@ steps:
 - task: SonarCloudPrepare@1
   displayName: 'SonarQube - Initialize'
   inputs:
-    SonarCloud:   '$env:sonarConnection'
-    organization: '$env:sonarOrganization'
-    projectKey:   '$env:sonarProjectKey'
-    projectName:  '$env:sonarProjectName'
+    SonarCloud:   '$(env:sonarConnection)'
+    organization: '$(env:sonarOrganization)'
+    projectKey:   '$(env:sonarProjectKey)'
+    projectName:  '$(env:sonarProjectName)'
