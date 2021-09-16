@@ -9,17 +9,16 @@ steps:
       Import-Csv .\sonarQube.csv | ForEach-Object {
         
         $sqConn = $_.connection
-        #$sqOrg  = $_.organization
+        $sqOrg  = $_.organization
         $sqPK   = $_.projectKey
-        #$sqPN   = $_.projectName
-        #echo $sqConn, $sqOrg, $sqPK, $sqPN  
-        echo $sqConn, $sqPK  
+        $sqPN   = $_.projectName
+        echo $sqConn, $sqOrg, $sqPK, $sqPN  
         
         # Set environment variables for use in task to initialize SonarQube
         Write-Host "##vso[task.setvariable variable=sonarConnection]$sqConn"
-        #Write-Host "##vso[task.setvariable variable=sonarOrganization]$sqOrg" 
+        Write-Host "##vso[task.setvariable variable=sonarOrganization]$sqOrg" 
         Write-Host "##vso[task.setvariable variable=sonarProjectKey]$sqPK" 
-        #Write-Host "##vso[task.setvariable variable=sonarProjectName]$sqPN"
+        Write-Host "##vso[task.setvariable variable=sonarProjectName]$sqPN"
       }
 
 - task: PowerShell@2
@@ -37,11 +36,11 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      echo 'In task: Display sonar csv values'
+      echo 'In task: Display all sonar values'
       Write-Host "Using connection: $env:sonarConnection"
-      #Write-Host "Using organization: $env:sonarOrganization"
+      Write-Host "Using organization: $env:sonarOrganization"
       Write-Host "Using key: $env:sonarProjectKey"
-      #Write-Host "Using name: $env:sonarProjectName"
+      Write-Host "Using name: $env:sonarProjectName"
       Write-Host "Using token: $env:sonarProjectAPIKey"
       Write-Host "Using url: $env:sonarUrl"
 
