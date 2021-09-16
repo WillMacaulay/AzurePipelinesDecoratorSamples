@@ -1,6 +1,3 @@
-variables:
-  System.Debug: true
-  
 steps:
   
 - task: PowerShell@2
