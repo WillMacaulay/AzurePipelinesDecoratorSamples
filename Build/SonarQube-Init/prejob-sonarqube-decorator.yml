@@ -5,6 +5,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+      echo 'In task: Set SonarQube values from repository file'
       Import-Csv .\sonarQube.csv | ForEach-Object {
         
         $sqConn = $_.connection
@@ -26,7 +27,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      echo 'In task 2'
+      echo 'In task: Display sonar csv values'
       Write-Host "Using connection: $env:sonarConnection"
       Write-Host "Using organization: $env:sonarOrganization"
       Write-Host "Using key: $env:sonarProjectKey"
