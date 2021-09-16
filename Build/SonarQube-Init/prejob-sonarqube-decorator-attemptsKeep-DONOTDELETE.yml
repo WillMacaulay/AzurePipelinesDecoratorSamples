@@ -45,17 +45,23 @@ steps:
     projectKey:   WillMacaulay_myApp1
     projectName:  WillMacaulay_myApp1
 
-    # Couldn't get these to work 
-    #SonarCloud:   '$(sonarConnection)'
-    #organization: '$(sonarOrganization)'
-    #projectKey:   '$(sonarProjectKey)'
-    #projectName:  '$(sonarProjectName)'
-    
-    # or couldn't get these to work 
+    # Could get to work
     #SonarCloud:   '$(env:sonarConnection)'
     #organization: '$(env:sonarOrganization)'
     #projectKey:   '$(env:sonarProjectKey)'
     #projectName:  '$(env:sonarProjectName)'
+
+    # or couldn't get these to work 
+    #SonarCloud:   '$(sonarConnection)'
+    #organization: '$(sonarOrganization)'
+    #projectKey:   '$(sonarProjectKey)'
+    #projectName:  '$(sonarProjectName)'
+
+    # or this
+    #SonarCloud:   '$($sonarConnection)'
+    #organization: '$($sonarOrganization)'
+    #projectKey:   '$($sonarProjectKey)'
+    #projectName:  '$($sonarProjectName)'
 
     # Tried using a sonar properties file - but that doen't work eother
     #SonarCloud:   SonarQube
@@ -65,6 +71,4 @@ steps:
     #configMode:   file
     #configFile:   $(System.DefaultWorkingDirectory)/sonar-project.properties
 
-    
-    
 
