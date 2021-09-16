@@ -1,6 +1,39 @@
 steps:
-- task: SonarCloudAnalyze@1
-  displayName: 'Run SonarCloud analysis'
 
-- task: SonarCloudPublish@1
-  displayName: 'Publish results on build summary'
+- task: PowerShell@2
+  displayName: 'Set SonarQube values from repository file - ProjectKey needed'
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo 'In task: Set SonarQube values from repository file - just need project key here'
+      Import-Csv .\sonarQube.csv | ForEach-Object {
+        
+        #$sqConn = $_.connection
+        #$sqOrg  = $_.organization
+        $sqPK   = $_.projectKey
+        #$sqPN   = $_.projectName
+        #echo $sqConn, $sqOrg, $sqPK, $sqPN  
+        echo $sqPK
+        
+        # Set environment variables for use in task to initialize SonarQube
+        #Write-Host "##vso[task.setvariable variable=sonarConnection]$sqConn"
+        #Write-Host "##vso[task.setvariable variable=sonarOrganization]$sqOrg" 
+        Write-Host "##vso[task.setvariable variable=sonarProjectKey]$sqPK" 
+        #Write-Host "##vso[task.setvariable variable=sonarProjectName]$sqPN"
+      }
+
+- task: PowerShell@2
+  displayName: 'Display sonar values'
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo 'In task: Display sonar csv values'
+      Write-Host "Using key: $env:sonarProjectKey"
+
+      
+- task: DotNetCoreCLI@2
+  displayName: 'End Sonarscanner'
+  inputs:
+    command: 'custom'
+    custom: 'sonarscanner'
+    arguments: 'end /key:"$(sonarProjectKey)" '

@@ -9,39 +9,53 @@ steps:
       Import-Csv .\sonarQube.csv | ForEach-Object {
         
         $sqConn = $_.connection
-        $sqOrg  = $_.organization
+        #$sqOrg  = $_.organization
         $sqPK   = $_.projectKey
-        $sqPN   = $_.projectName
-        echo $sqConn, $sqOrg, $sqPK, $sqPN  
+        #$sqPN   = $_.projectName
+        #echo $sqConn, $sqOrg, $sqPK, $sqPN  
+        echo $sqConn, $sqPK  
         
         # Set environment variables for use in task to initialize SonarQube
         Write-Host "##vso[task.setvariable variable=sonarConnection]$sqConn"
-        Write-Host "##vso[task.setvariable variable=sonarOrganization]$sqOrg" 
+        #Write-Host "##vso[task.setvariable variable=sonarOrganization]$sqOrg" 
         Write-Host "##vso[task.setvariable variable=sonarProjectKey]$sqPK" 
-        Write-Host "##vso[task.setvariable variable=sonarProjectName]$sqPN"
+        #Write-Host "##vso[task.setvariable variable=sonarProjectName]$sqPN"
       }
 
-      
 - task: PowerShell@2
-  displayName: 'Display sonar csv values'
+  displayName: 'Set SonarQube command line values'
+  inputs:
+  targetType: 'inline'
+  script: |
+    echo 'In task: Set SonarQube command line values'
+      # Set environment variables for use in task to initialize SonarQube
+      Write-Host "##vso[task.setvariable variable=sonarProjectAPIKey]be65f1095af41a92459914c8666c287ed64e287c
+      Write-Host "##vso[task.setvariable variable=sonarUrl]https://sonarcloud.io
+
+- task: PowerShell@2
+  displayName: 'Display sonar values'
   inputs:
     targetType: 'inline'
     script: |
       echo 'In task: Display sonar csv values'
       Write-Host "Using connection: $env:sonarConnection"
-      Write-Host "Using organization: $env:sonarOrganization"
+      #Write-Host "Using organization: $env:sonarOrganization"
       Write-Host "Using key: $env:sonarProjectKey"
-      Write-Host "Using name: $env:sonarProjectName"
+      #Write-Host "Using name: $env:sonarProjectName"
+      Write-Host "Using token: $env:sonarProjectAPIKey"
+      Write-Host "Using url: $env:sonarUrl"
 
-
-- task: SonarCloudPrepare@1
-  displayName: 'SonarQube - Initialize'
+  # Attempting to use sonar scanner directly as opposed to the yaml build tasks
+- task: DotNetCoreCLI@2
+  displayName: 'Install Sonarscanner'
   inputs:
-    #SonarCloud:   '$(env:sonarConnection)'
-    #organization: '$(env:sonarOrganization)'
-    #projectKey:   '$(env:sonarProjectKey)'
-    #projectName:  '$(env:sonarProjectName)'
-    SonarCloud:   SonarQube
-    organization: willmacaulay
-    projectKey:   WillMacaulay_myApp1
-    projectName:  WillMacaulay_myApp1
+    command: 'custom'
+    custom: 'tool'
+    arguments: 'install --global dotnet-sonarscanner'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Begin Sonarscanner'
+  inputs: 
+    command: 'custom'
+    custom: 'sonarscanner'
+    arguments: 'begin /key:"$(sonarProjectKey)" /name:"$(sonarConnection)" /d:sonar.host.url="$(sonarUrl)" /d:sonar.login="$(sonarProjectAPIKey)"'

@@ -1,0 +1,70 @@
+steps:
+  
+- task: PowerShell@2
+  displayName: 'Set SonarQube values from repository file'
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo 'In task: Set SonarQube values from repository file'
+      Import-Csv .\sonarQube.csv | ForEach-Object {
+        
+        $sqConn = $_.connection
+        $sqOrg  = $_.organization
+        $sqPK   = $_.projectKey
+        $sqPN   = $_.projectName
+        echo $sqConn, $sqOrg, $sqPK, $sqPN  
+        
+        # Set environment variables for use in task to initialize SonarQube
+        Write-Host "##vso[task.setvariable variable=sonarConnection]$sqConn"
+        Write-Host "##vso[task.setvariable variable=sonarOrganization]$sqOrg" 
+        Write-Host "##vso[task.setvariable variable=sonarProjectKey]$sqPK" 
+        Write-Host "##vso[task.setvariable variable=sonarProjectName]$sqPN"
+      }
+
+      
+- task: PowerShell@2
+  displayName: 'Display sonar csv values'
+  inputs:
+    targetType: 'inline'
+    script: |
+      echo 'In task: Display sonar csv values'
+      Write-Host "Using connection: $env:sonarConnection"
+      Write-Host "Using organization: $env:sonarOrganization"
+      Write-Host "Using key: $env:sonarProjectKey"
+      Write-Host "Using name: $env:sonarProjectName"
+
+
+- task: SonarCloudPrepare@1
+  displayName: 'SonarQube - Initialize'
+  inputs:
+    
+    # Hard coded values work - but would be project specific when the extension runs 
+    # We want to be able to specify different projects at this point 
+    SonarCloud:   SonarQube
+    organization: willmacaulay
+    projectKey:   WillMacaulay_myApp1
+    projectName:  WillMacaulay_myApp1
+
+    # Couldn't get these to work 
+    #SonarCloud:   '$(sonarConnection)'
+    #organization: '$(sonarOrganization)'
+    #projectKey:   '$(sonarProjectKey)'
+    #projectName:  '$(sonarProjectName)'
+    
+    # or couldn't get these to work 
+    #SonarCloud:   '$(env:sonarConnection)'
+    #organization: '$(env:sonarOrganization)'
+    #projectKey:   '$(env:sonarProjectKey)'
+    #projectName:  '$(env:sonarProjectName)'
+
+    # Tried using a sonar properties file - but that doen't work eother
+    #SonarCloud:   SonarQube
+    #organization: willmacaulay
+    #projectKey:   override
+    #projectName:  override
+    #configMode:   file
+    #configFile:   $(System.DefaultWorkingDirectory)/sonar-project.properties
+
+    
+    
+
