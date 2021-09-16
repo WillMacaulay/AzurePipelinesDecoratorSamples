@@ -1,5 +1,5 @@
 steps:
-  
+
 - task: PowerShell@2
   displayName: 'Set SonarQube values from repository file'
   inputs:
@@ -14,7 +14,6 @@ steps:
         $sqPN   = $_.projectName
         echo $sqConn, $sqOrg, $sqPK, $sqPN  
         
-        # Set environment variables for use in task to initialize SonarQube
         Write-Host "##vso[task.setvariable variable=SONARCONNECTION]$sqConn"
         Write-Host "##vso[task.setvariable variable=SONARORGANIZATION]$sqOrg" 
         Write-Host "##vso[task.setvariable variable=SONARPROJECTKEY]$sqPK" 
@@ -32,7 +31,6 @@ steps:
       Write-Host "Using key:          $(SONARPROJECTKEY)"
       Write-Host "Using name:         $(SONARPROJECTNAME)"
 
-
 - task: SonarCloudPrepare@1
   displayName: 'SonarQube - Initialize'
   inputs:
@@ -40,3 +38,4 @@ steps:
     organization: $(SONARORGANIZATION)
     projectKey:   $(SONARPROJECTKEY)
     projectName:  $(SONARPROJECTNAME)    
+
