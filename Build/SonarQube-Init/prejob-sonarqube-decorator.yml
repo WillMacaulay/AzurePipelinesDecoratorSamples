@@ -25,16 +25,19 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      echo 'In task: Display sonar csv values'
-      Write-Host "Using connection:   $SONARCONNECTION"
-      Write-Host "Using organization: $SONARORGANIZATION"
-      Write-Host "Using key:          $SONARPROJECTKEY"
-      Write-Host "Using name:         $SONARPROJECTNAME"
+      echo 'In task: Display Sonar csv values'
+      # Need to use $env: and name to be displayed properly (as its Powershell)
+      Write-Host "Using connection:   $env:SONARCONNECTION"
+      Write-Host "Using organization: $env:SONARORGANIZATION"
+      Write-Host "Using key:          $env:SONARPROJECTKEY"
+      Write-Host "Using name:         $env:SONARPROJECTNAME"
 
 - task: SonarCloudPrepare@1
   displayName: 'SonarQube - Initialize'
   inputs:
+    # Cannot set the SonarCloud value using a variable for some reason!!!
     SonarCloud:   SonarQube
-    organization: willmacaulay
-    projectKey:   $(SONARPROJECTNAME)
+    # Others can be set by variable
+    organization: $(SONARORGANIZATION)
+    projectKey:   $(SONARPROJECTKEY)
     projectName:  $(SONARPROJECTNAME)    
