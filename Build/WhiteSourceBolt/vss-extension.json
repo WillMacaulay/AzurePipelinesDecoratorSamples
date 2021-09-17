@@ -1,0 +1,35 @@
+{
+    "manifestVersion": 1,
+    "id": "whitesourceboltdecoratorpost",
+    "name": "WhiteSourceBolt Decorator POST",
+    "version": "1.0.0",
+    "publisher": "WillMacaulay",
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],    
+    "description": "Add final tasks for WhiteSourceBolt - Executes AFTER any other task",
+    "categories": [
+        "Azure Pipelines"
+    ],
+    "contributions": [
+        {
+            "id": "my-required-task",
+            "type": "ms.azure-pipelines.pipeline-decorator",
+            "targets": [
+                "ms.azure-pipelines-agent-job.post-job-tasks"
+            ],
+            "properties": {
+                "template": "postjob-whitesourcebolt-decorator.yml"
+            }
+        }
+    ],
+    "files": [
+        {
+            "path": "postjob-whitesourcebolt-decorator.yml",
+            "addressable": true,
+            "contentType": "text/plain"
+        }
+    ]
+}
